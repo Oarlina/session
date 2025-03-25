@@ -9,7 +9,7 @@
         .categoryNav{color: #006eff;}
     </style>
 
-    <a href="/categories/new"><button>Créer une catégorie</button></a>
+    <a href="{{ path('new_category') }}"><button>Créer une catégorie</button></a>
 
     {% if categories == null %}
         <p>Aucune catégorie</p>
