@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <style>.stagiairesNav, .sesionsNav, .modulesNav, .cateogriesNav{color : black;}</style>
+    <style>.internNav, .sesionNav, .courseNav, .categoryNav{color : black;}</style>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -20,12 +20,12 @@
     </head>
     <body>
         <header>
-            <nav>
+            <nav class="bg-body-tertiary">
                 <a href=".." class="homeNav"><i class="fa-solid fa-house "></i></a>
-                <a href="/stagiaires" class="stagiairesNav">Stagiaires</a>
-                <a href="/sessions" class="sesionsNav">Sessions</a>
-                <a href="/modules" class="modulesNav">Modules</a>
-                <a href="/categories" class="cateogriesNav">Catégories</a>
+                <a href="/stagiaires" class="internNav">Stagiaires</a>
+                <a href="/sessions" class="sesionNav">Sessions</a>
+                <a href="/modules" class="courseNav">Modules</a>
+                <a href="/categories" class="categoryNav">Catégories</a>
             </nav>
         </header>
         {% block body %}

@@ -11,7 +11,7 @@ final class StagiairesController extends AbstractController
     #[Route('/stagiaires', name: 'app_stagiaires')]
     public function index(): Response
     {
-        return $this->render('stagiaires/index.html.twig', [
+        return $this->render('intern/index.html.twig', [
             'controller_name' => 'StagiairesController',
         ]);
     }

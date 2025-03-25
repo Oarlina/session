@@ -11,7 +11,7 @@ final class ModulesController extends AbstractController
     #[Route('/modules', name: 'app_modules')]
     public function index(): Response
     {
-        return $this->render('modules/index.html.twig', [
+        return $this->render('course/index.html.twig', [
             'controller_name' => 'ModulesController',
         ]);
     }

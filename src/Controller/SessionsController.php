@@ -11,7 +11,7 @@ final class SessionsController extends AbstractController
     #[Route('/sessions', name: 'app_sessions')]
     public function index(): Response
     {
-        return $this->render('sessions/index.html.twig', [
+        return $this->render('session/index.html.twig', [
             'controller_name' => 'SessionsController',
         ]);
     }

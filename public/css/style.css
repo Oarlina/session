@@ -9,6 +9,9 @@ body{
     a{
         text-decoration: none;
     }
+    .black{
+        color: black;
+    }
     header{
         width: 100%;
         nav{
