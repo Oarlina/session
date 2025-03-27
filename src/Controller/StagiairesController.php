@@ -22,14 +22,16 @@ final class StagiairesController extends AbstractController
         ]);
     }
 
+    #[Route('interns/{id}/edit', name:'edit_intern')]
     #[Route('interns/new', name:'new_intern')]
-    public function new(Request $request, EntityManagerInterface $entityManager) : Response
+    public function new(Intern $intern = null, Request $request, EntityManagerInterface $entityManager) : Response
     {
-        $intern = new Intern();
-
+        if (!$intern){
+            $intern = new Intern();
+        }
+        // dd($intern);
         // je cree le formulaire puis le récupère
         $form = $this->createForm(InternType::class, $intern);
-        // dd($form);
         $form->handleRequest($request);
 
         // je verifie que le formulaire est juste 
