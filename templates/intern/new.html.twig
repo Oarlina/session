@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'un stagiaire{% endblock %}
+
+{% block body %}
+    <style>
+        .homeNav, .sesionNav, .categoryNav{color : black;}
+        .internNav{color:#006eff}
+    </style>
+    {% if edit %}
+        <h3>Modifer le stagiaire </h3>
+    {% else %}
+        <h3>Ajouter un stagiaire</h3>
+    {% endif %}
+    
+    {{form_start(formIntern)}}  
+        <div class="row">
+            <div class="col-sm">{{form_row(formIntern.name)}}</div>
+            <div class="col-sm">{{form_row(formIntern.forname)}}</div>
+            <div class="col-sm">{{form_row(formIntern.gender)}}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm">{{form_row(formIntern.email)}}</div>
+            <div class="col-sm">{{form_row(formIntern.phoneNumber)}}</div>
+        </div>
+    {{ form_end(formIntern) }}  
+{% endblock %}

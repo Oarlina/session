@@ -5,7 +5,7 @@
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
     <style>
-        .homeNav, .sesionNav, .internNav, .courseNav, .categoryNav{color : black;}
+        .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
     </style>
     <h3>Liste de {{category}} :</h3>
     <a href="{{ path('new_course', {'idCategory': category.id}) }}"><button>Créer un module</button></a>

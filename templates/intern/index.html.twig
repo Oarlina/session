@@ -5,11 +5,29 @@
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
     <style>
-        .homeNav, .sesionNav, .courseNav, .categoryNav{color : black;}
+        .homeNav, .sesionNav, .categoryNav{color : black;}
         .internNav{color: #006eff;}
     </style>
 
-    <button>Créer un stagiaire</button>
+    <button><a href="{{path('new_intern')}}"> Créer un stagiaire</a></button>
 
+    <table class="table table-stripped">
+        <tbody>
+            {% if interns |length >= 1 %}
+                {% for intern in interns %}
+                    <tr>
+                        <td>{{intern.name}}  {{intern.forname}}</td>
+                        <td><a href=""><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td><a href=""> <i class="fa-solid fa-trash"></i></a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>Aucun stagiaires</td>
+                </tr>
+            {% endif %}
+
+        </tbody>
+    </table>
 
 {% endblock %}

@@ -33,7 +33,6 @@ final class ModulesController extends AbstractController
         if (!$idCategory){
             $idCategory = $course->getCategory()->getId();
         }
-        // dd($idCategory);
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
         // je cherche dans category repository l'id que j'ai envoyer dans la route 
