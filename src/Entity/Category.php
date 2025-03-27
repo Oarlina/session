@@ -77,6 +77,7 @@ class Category
     }
 
     public function __toString(){
+        
         return $this->getNameCategory();
         return $this->getCourses();
     }

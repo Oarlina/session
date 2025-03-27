@@ -57,4 +57,10 @@ final class CategoriesController extends AbstractController
 
         return $this->redirectToRoute('app_categories');
     }
+
+    #[Route('/category/{id}/detail', name:'detail_category')]
+    public function detail(Category $category) : Response
+    {
+        return $this->render('category/detail.html.twig', ['category' => $category]);
+    }
 }

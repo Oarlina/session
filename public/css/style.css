@@ -4,14 +4,17 @@
     box-sizing: border-box;
 }
 
+a{
+    text-decoration: none;
+}
+.black{
+    color: black;
+}
+.black:hover{
+    color: green ;
+}
 body{
     width: 100%;
-    a{
-        text-decoration: none;
-    }
-    .black{
-        color: black;
-    }
     header{
         width: 100%;
         nav{

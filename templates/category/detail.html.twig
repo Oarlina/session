@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste de {{category}} : {% endblock %}
+
+{% block body %}
+    {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
+    <style>
+        .homeNav, .sesionNav, .internNav, .courseNav, .categoryNav{color : black;}
+    </style>
+    <h3>Liste de {{category}} :</h3>
+    <a href="{{ path('new_course', {'idCategory': category.id}) }}"><button>Créer un module</button></a>
+
+    <table class="table table-striped">
+        <tbody>
+            {% if category.courses |length >= 1 %}
+                {% for course in category.courses %}
+                    <tr>
+                        <td> {{course}} </td>
+                        <td> <a href="{{ path('edit_course', {'id': course.id, 'idCategory':category.id}) }}" > <i class="fa-solid fa-pen-to-square black"></i></a></td>
+                        <td> <a href="{{ path('delete_course', {'id': course.id}) }}" class="black"><i class="fa-solid fa-trash"></i></a> </td>
+                    </tr>
+                {% endfor %}
+            {% else  %}
+                <tr><td>Aucun module </td></tr>
+            {% endif %}     
+        </tbody>
+    </table>   
+
+{% endblock %}

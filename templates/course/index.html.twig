@@ -9,6 +9,24 @@
         .courseNav{color: #006eff;}
     </style>
 
-    <button>Créer un module</button>
+    <a href="{{ path('new_course') }}"><button>Créer un module</button></a>
+
+    <table class="table table-striped">
+        <tbody>
+            {% if courses %}
+                {% for course in courses %}
+                    <tr>
+                        <td>{{course.nameCourse}}</td>
+                        <td> <a href="{{ path('edit_course', {'id': course.id}) }}" class="black"> <i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td> <a href="{{ path('delete_course', {'id': course.id}) }}" class="black"><i class="fa-solid fa-trash"></i></a> </td>
+                    </tr>
+                {% endfor %}    
+            {% else %}
+                <tr>
+                    <td>Aucun module</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 
 {% endblock %}

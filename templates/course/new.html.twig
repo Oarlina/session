@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Formulaire d'une catégorie{% endblock %}
+{% block title %}Formulaire d'un module {% endblock %}
 
 {% block body %}
     <style>
         .homeNav, .sesionNav, .internNav, .courseNav, .categoryNav{color : black;}
     </style>
     {% if edit %}
-        <h3>Modifer une catégorie</h3>
+        <h3>Modifer un module dans {{category}}</h3>
     {% else %}
-        <h3>Ajouter une catégorie</h3>
+        <h3>Ajouter un module dans {{category}}</h3>
     {% endif %}
     
-    {{ form(formCategory) }}    
+    {{ form(formCourse) }}    
 
 {% endblock %}
