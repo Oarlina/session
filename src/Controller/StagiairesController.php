@@ -49,4 +49,20 @@ final class StagiairesController extends AbstractController
             'edit' => $intern->getId()
         ]);
     }
+
+    #[Route('intern/{id}/delete', name:'delete_intern')]
+    public function delete (Intern $intern, EntityManagerInterface $entityManager) :Response
+    {
+        $entityManager->remove($intern);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_interns');
+    }
+
+    #[Route('intern/{id}', name:'detail_intern')]
+    public function detail(Intern $intern, EntityManagerInterface $entityManager) : Response
+    {
+        $sessions = $intern->getSessions();
+        return $this->render('intern/detail.html.twig', ['intern' => $intern, 'sessions'=> $sessions]);
+    }
 }

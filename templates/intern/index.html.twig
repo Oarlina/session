@@ -16,9 +16,9 @@
             {% if interns |length >= 1 %}
                 {% for intern in interns %}
                     <tr>
-                        <td>{{intern.name}}  {{intern.forname}}</td>
+                        <td><a href="{{path('detail_intern', {'id': intern.id})}}">{{intern.name}}  {{intern.forname}} </a></td>
                         <td><a href="{{path('edit_intern', {'id':intern.id})}}"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                        {# <td><a href="{{path('delete_intern', {'id':intern.id})}}"> <i class="fa-solid fa-trash"></i></a></td> #}
+                        <td><a href="{{path('delete_intern', {'id':intern.id})}}"> <i class="fa-solid fa-trash"></i></a></td>
                     </tr>
                 {% endfor %}
             {% else %}

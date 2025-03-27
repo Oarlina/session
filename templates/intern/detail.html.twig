@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detail de {{intern.name}} {{intern.forname}}{% endblock %}
+
+{% block body %}
+    {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
+    <style>
+        .homeNav, .sesionNav, .categoryNav, .internNav{color : black;}
+    </style>
+
+    <h3>Fiche stagiaire de {{ intern.name }} {{ intern.forname }}</h3>
+    <p>
+        <u>Prénom :</u> {{ intern.name }} <br>
+        <u>Nom :</u> {{ intern.forname }} <br>
+        <u>Sexe :</u> {{ intern.gender }} <br>
+        <u>Ville :</u> {{ intern.city }} <br>
+        <u>Email :</u> {{ intern.email }} <br>
+        <u>Numéro de tel :</u> {{ intern.phoneNumber }} 
+    </p>
+    
+    <h3>Sessions du stagiaire :</h3>
+    
+    {# <button><a href="{{path('new_session')}}"> Créer un stagiaire</a></button> #}
+    <table>
+        <tbody>
+            {% if sessions |length >=1 %}
+                {% for session in sessions %}
+                    <tr>
+                        <td>{{session}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>Aucune session</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}
