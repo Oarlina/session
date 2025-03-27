@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello StagiairesController!{% endblock %}
+{% block title %}Listes des stagiaires {% endblock %}
 
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
@@ -8,7 +8,7 @@
         .homeNav, .sesionNav, .categoryNav{color : black;}
         .internNav{color: #006eff;}
     </style>
-
+    <h3>Liste des stagiaires : </h3>
     <button><a href="{{path('new_intern')}}"> Créer un stagiaire</a></button>
 
     <table class="table table-stripped">

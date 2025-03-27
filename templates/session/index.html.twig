@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SessionsController!{% endblock %}
+{% block title %}Liste des sessions {% endblock %}
 
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
@@ -8,6 +8,24 @@
         .homeNav, .internNav, .categoryNav{color : black;}
         .sesionNav{color: #006eff;}
     </style>
-
+    <h3>Liste des sessions : </h3>
     <button>Créer une session</button>
+
+    <table class="table table-stripped">
+        <tbody>
+            {% if sessions |length >=1 %}
+                {% for sesion in sessions %}
+                    <tr>
+                        <td>{{session.nameSession}}</td>
+                        <td>edit</td>
+                        <td>supprimer</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>Aucune session</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 {% endblock %}

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ModulesController!{% endblock %}
+{% block title %}Liste des modules{% endblock %}
 
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
     <style>
         .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
     </style>
-
+    <h3>Liste des modules : </h3>
     <a href="{{ path('new_course') }}"><button>Créer un module</button></a>
 
     <table class="table table-striped">
