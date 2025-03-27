@@ -16,7 +16,7 @@
                 {% for course in category.courses %}
                     <tr>
                         <td> {{course}} </td>
-                        <td> <a href="{{ path('edit_course', {'id': course.id, 'idCategory':category.id}) }}" > <i class="fa-solid fa-pen-to-square black"></i></a></td>
+                        <td> <a href="{{ path('edit_course', {'course': course.id}) }}" > <i class="fa-solid fa-pen-to-square black"></i></a></td>
                         <td> <a href="{{ path('delete_course', {'id': course.id}) }}" class="black"><i class="fa-solid fa-trash"></i></a> </td>
                     </tr>
                 {% endfor %}

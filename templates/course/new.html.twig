@@ -7,9 +7,9 @@
         .homeNav, .sesionNav, .internNav, .courseNav, .categoryNav{color : black;}
     </style>
     {% if edit %}
-        <h3>Modifer un module dans {{category}}</h3>
+        <h3>Modifer un module dans {{category }}</h3>
     {% else %}
-        <h3>Ajouter un module dans {{category}}</h3>
+        <h3>Ajouter un module dans {{category }}</h3>
     {% endif %}
     
     {{ form(formCourse) }}    

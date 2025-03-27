@@ -23,14 +23,17 @@ final class ModulesController extends AbstractController
         ]);
     }
 
-    #[Route('/course/{idCategory}/edit', name:'edit_course')]
+    #[Route('/course/{course}/edit', name:'edit_course')]
     #[Route('/course/{idCategory}/new', name:'new_course')]
-    public function new(int $idCategory, Course $course =null, Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository) : Response
+    public function new(int $idCategory =null, Course $course =null, Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository) : Response
     {
         if( !$course){
             $course = new Course();
         }
-        
+        if (!$idCategory){
+            $idCategory = $course->getCategory()->getId();
+        }
+        // dd($idCategory);
         $form = $this->createForm(CourseType::class, $course);
         $form->handleRequest($request);
         // je cherche dans category repository l'id que j'ai envoyer dans la route 
@@ -39,6 +42,7 @@ final class ModulesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $course = $form->getData();
             $course->setCategory($category); // je rajoute l'id de la catégorie 
+
             $entityManager->persist($course); // c'est la prepare en PDO
             $entityManager->flush(); // c'est l'execute en PDO
 
@@ -56,10 +60,11 @@ final class ModulesController extends AbstractController
     #[Route('/course/{id}/delete', name:'delete_course')]
     public function delete(Course $course, EntityManagerInterface $entityManager): Response
     {
+        $categoryId = $course->getCategory()->getId();
         $entityManager->remove($course);
         $entityManager->flush();
-
+        // dd($course);
         // return $this->render('course/index.html.twig');
-        return $this->redirectToRoute('app_courses');
+        return $this->redirectToRoute('detail_category', array('id' => $categoryId));
     }
 }
