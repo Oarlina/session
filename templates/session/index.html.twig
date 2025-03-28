@@ -12,11 +12,22 @@
     <button><a href="{{path('new_session')}}">Créer une session</a></button>
 
     <table class="table table-stripped">
+        <thead>
+            <tr>
+                <th scope="col">Intitulé Session</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Supprimer</th>
+            </tr>
+        </thead>
         <tbody>
             {% if sessions |length >=1 %}
                 {% for session in sessions %}
                     <tr>
-                        <td> {{session.nameSession}} </td>
+                        <td> <a href="{{path('detail_session', {'id' : session.id})}}">{{session.nameSession}}</a> </td>
+                        <td>{{session.beginSession | date("d / m / Y")}}</td>
+                        <td>{{session.finishSession| date("d / m / Y")}}</td>
                         <td> <a href="{{ path('edit_session', {'id': session.id}) }}" class="black"> <i class="fa-solid fa-pen-to-square"></i></a></td>
                         <td> <a href="{{ path('delete_session', {'id': session.id}) }}" class="black"><i class="fa-solid fa-trash"></i></a> </td>
                     </tr>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Session;
 use App\Form\SessionType;
+use App\Repository\InternRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,5 +54,17 @@ final class SessionsController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_sessions');
+    }
+
+    #[Route('/session/{id}', name:'detail_session')]
+    public function detail (Session $session, InternRepository $internRepository) :Response
+    {
+        $interns = '';
+        $courses = '';
+        return $this->render('session/detail.html.twig', [
+            'session' => $session,
+            'interns' => $interns,
+            'courses' => $courses
+        ]);
     }
 }

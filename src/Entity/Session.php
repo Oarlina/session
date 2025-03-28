@@ -168,4 +168,18 @@ class Session
 
         return $this;
     }
+    public function inscrit(){
+        return count($this->interns);
+    }
+    public function restant(){
+        $restant = $this->nbPlace - count($this->interns);
+        return $restant;
+    }
+
+
+    public function __toString(){
+        return $this->nameSession;
+        return $this->beginSession->format('d/m/Y');
+        return $this->finishSession->format('d/m/Y');
+    }
 }

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{session.nameSession}} {% endblock %}
+
+{% block body %}
+    {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
+    <style>
+        .homeNav, .internNav, .categoryNav{color : black;}
+        .sesionNav{color: #006eff;}
+    </style>
+    <h3>{{session.nameSession}} : </h3>
+    {# <button><a href="{{path('new_session')}}">Créer une session</a></button> #}
+
+    <table class="table table-stripped">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">Intitulé</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Formateur</th>
+                <th scope="col">Nombre de place</th>
+                <th scope="col">Nombre d'inscrit</th>
+                <th scope="col">Nombre de place restant</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> {{session.nameSession}} </td>
+                <td>{{session.beginSession | date("d / m / Y")}}</td>
+                <td>{{session.finishSession| date("d / m / Y")}}</td>
+                <td>Pas encore créer de user</td>
+                {# <td>{{session.user}}</td> #}
+                <td>{{session.nbPlace}}</td>
+                <td>{{session.inscrit}}</td>
+                <td>{{session.restant}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <h3>Liste des stagiaires inscrit :</h3>
+    <button>Ajouter un stagiaire</button>
+    <table class="table table-stripped">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">Nom Prénom</th>
+                <th scope="col">Désincrire</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if interns | length >=1 %}
+                {% for intern in interns %}
+                    <td><a href="{{path('detail_intern', {'id':intern.id})}}">intern.names</a></td>
+                    <td>Désinscrire</td>
+                {% endfor %}
+            {% else %}
+                <td>Aucun stagiaire inscrit</td>
+                <td></td>
+            {% endif %}
+        </tbody>
+    </table>
+    <br>
+    <h3>Liste des modules : </h3>
+    <button>Ajouter un module</button>
+    <table class="table table-stripped">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">Module</th>
+                <th scope="col">Duréee</th>
+                <th scope="col">Catégorie</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if courses | length >=1 %}
+                {% for course in courses %}
+                    <tr>
+                        <td>{{course.nameCourse}}</td>
+                        <td>{{course.nbDay}}</td>
+                        <td>{{course.nameCategory}}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>Aucun module</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}
