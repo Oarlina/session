@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Intern;
 use App\Entity\Session;
 use App\Form\SessionType;
 use App\Repository\InternRepository;
@@ -56,15 +57,19 @@ final class SessionsController extends AbstractController
         return $this->redirectToRoute('app_sessions');
     }
 
-    #[Route('/session/{id}', name:'detail_session')]
-    public function detail (Session $session, InternRepository $internRepository) :Response
+    #[Route('/session/remove/intern/{id}/{idSession}', name:'remove_intern')]
+    public function remove_intern (Intern $intern, Session $session, SessionRepository $sessionRepository) :Response
     {
-        $interns = '';
-        $courses = '';
+        $intern = $sessionRepository->removeIntern($intern->getId());
+        dd($intern);
+        return $this->redirectToRoute('detail_session');
+    }
+    
+    #[Route('/session/{id}', name:'detail_session')]
+    public function detail (Session $session) :Response
+    {
         return $this->render('session/detail.html.twig', [
-            'session' => $session,
-            'interns' => $interns,
-            'courses' => $courses
+            'session' => $session
         ]);
     }
 }

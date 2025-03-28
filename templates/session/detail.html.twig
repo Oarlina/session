@@ -8,7 +8,6 @@
         .homeNav, .internNav, .categoryNav, .sesionNav{color : black;}
     </style>
     <h3>{{session.nameSession}} : </h3>
-    {# <button type="button" class="btn btn-outline-dark"><a href="{{path('new_session')}}">Créer une session</a></button> #}
 
     <table class="table table-stripped">
         <thead>
@@ -36,55 +35,55 @@
         </tbody>
     </table>
     <br>
+
     <h3>Liste des stagiaires inscrit :</h3>
     <button type="button" class="btn btn-outline-dark">Ajouter un stagiaire</button>
-    <table class="table table-stripped">
-        <thead>
-            <tr class="table-primary">
-                <th scope="col">Nom Prénom</th>
-                <th scope="col">Désincrire</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if interns | length >=1 %}
-                {% for intern in interns %}
-                    <td><a href="{{path('detail_intern', {'id':intern.id})}}">intern.names</a></td>
-                    <td>Désinscrire</td>
+    {% if session.interns | length >=1 %}
+        <table class="table table-stripped">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Nom Prénom</th>
+                    <th scope="col">Désincrire</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intern in session.interns %}
+                <tr>
+                    <td><a href="{{path('detail_intern', {'id':intern.id})}}" class="black">{{intern.names}}</a></td>
+                    <td><a href="{{path('remove_intern', {'id':intern.id, 'idSession': session.id})}}" class="black">Désinscrire</a></td>
+                </tr>
                 {% endfor %}
-            {% else %}
-                <td>Aucun stagiaire inscrit</td>
-                <td></td>
-            {% endif %}
-        </tbody>
-    </table>
+            </tbody>
+        </table> 
+        {% else %} 
+        <p>Aucun stagiaire inscrit!</p> 
+        {% endif %}
     <br>
     <h3>Liste des modules : </h3>
     <button type="button" class="btn btn-outline-dark">Ajouter un module</button>
-    <table class="table table-stripped">
-        <thead>
-            <tr class="table-primary">
-                <th scope="col">Module</th>
-                <th scope="col">Duréee</th>
-                <th scope="col">Catégorie</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if courses | length >=1 %}
-                {% for course in courses %}
+    {% if session.programs | length >=1 %}
+        <table class="table table-stripped">
+            <thead>
+                <tr class="table-primary">
+                    <th>Module</th>
+                    <th>Duréee</th>
+                    <th>Catégorie</th>
+                    <th>Supprimé</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for program in session.programs %}
                     <tr>
-                        <td>{{course.nameCourse}}</td>
-                        <td>{{course.nbDay}}</td>
-                        <td>{{course.nameCategory}}</td>
+                        <td>{{program.course.nameCourse}}</td>
+                        <td>{{program.nbDay}} jours</td>
+                        <td>{{program.course.category.nameCategory}}</td>
+                        <td><i class="fa-solid fa-trash"></i></td>
                     </tr>
                 {% endfor %}
-            {% else %}
-                <tr>
-                    <td>Aucun module</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+        {% else %}
+            <p>Aucun module</p>
+        {% endif %}
 
 {% endblock %}

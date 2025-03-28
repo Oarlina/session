@@ -15,7 +15,6 @@ class InternRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Intern::class);
     }
-
     //    /**
     //     * @return Intern[] Returns an array of Intern objects
     //     */
