@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'un module {% endblock %}
+
+{% block body %}
+    <style>
+        .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
+    </style>
+    {% if edit %}
+        <h3>Modifer une session</h3>
+    {% else %}
+        <h3>Ajouter une session</h3>
+    {% endif %}
+     
+    {{form_start(formSession)}}  
+        {{form_row(formSession.nameSession)}}
+        <div class="row">
+            <div class="col-sm">{{form_row(formSession.beginSession)}}</div>
+            <div class="col-sm">{{form_row(formSession.finishSession)}}</div>
+        </div>
+        {{form_row(formSession.nbPlace)}}
+    {{ form_end(formSession) }}
+{% endblock %}
