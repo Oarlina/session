@@ -9,11 +9,11 @@
         .sesionNav{color: #006eff;}
     </style>
     <h3>Liste des sessions : </h3>
-    <button><a href="{{path('new_session')}}">Créer une session</a></button>
-
+    <button type="button" class="btn btn-outline-dark"><a href="{{path('new_session')}}" class="black">Créer une session</a></button>
+    <br><br>
     <table class="table table-stripped">
         <thead>
-            <tr>
+            <tr class="table-primary">
                 <th scope="col">Intitulé Session</th>
                 <th scope="col">Date de début</th>
                 <th scope="col">Date de fin</th>
@@ -25,7 +25,7 @@
             {% if sessions |length >=1 %}
                 {% for session in sessions %}
                     <tr>
-                        <td> <a href="{{path('detail_session', {'id' : session.id})}}">{{session.nameSession}}</a> </td>
+                        <td> <a href="{{path('detail_session', {'id' : session.id})}}" class="black">{{session.nameSession}}</a> </td>
                         <td>{{session.beginSession | date("d / m / Y")}}</td>
                         <td>{{session.finishSession| date("d / m / Y")}}</td>
                         <td> <a href="{{ path('edit_session', {'id': session.id}) }}" class="black"> <i class="fa-solid fa-pen-to-square"></i></a></td>

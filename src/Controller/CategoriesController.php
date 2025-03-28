@@ -16,7 +16,7 @@ final class CategoriesController extends AbstractController
     #[Route('/categories', name: 'app_categories')]
     public function index(CategoryRepository $catagoriesRepository): Response
     {
-        $categories = $catagoriesRepository->findAll();
+        $categories = $catagoriesRepository->findBy([], ['nameCategory' => 'ASC']);
         return $this->render('category/index.html.twig', [
             'categories' => $categories,
         ]);
@@ -59,8 +59,9 @@ final class CategoriesController extends AbstractController
     }
 
     #[Route('/category/{id}/detail', name:'detail_category')]
-    public function detail(Category $category) : Response
+    public function detail(Category $category, CategoryRepository $categoryRepository) : Response
     {
+        $category = $categoryRepository->findBy([], ['courses' => 'ASC']);
         return $this->render('category/detail.html.twig', ['category' => $category]);
     }
 }

@@ -8,9 +8,16 @@
         .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
     </style>
     <h3>Liste de {{category}} :</h3>
-    <a href="{{ path('new_course', {'idCategory': category.id}) }}"><button>Créer un module</button></a>
-
+    <button type="button" class="btn btn-outline-dark"><a href="{{ path('new_course', {'idCategory': category.id}) }}" class="black">Créer un module</a></button>
+    <br><br>
     <table class="table table-striped">
+        <thead>
+            <tr class="table-primary">
+                <th>Nom du module</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
         <tbody>
             {% if category.courses |length >= 1 %}
                 {% for course in category.courses %}

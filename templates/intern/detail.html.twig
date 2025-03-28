@@ -20,21 +20,19 @@
     
     <h3>Sessions du stagiaire :</h3>
     
-    {# <button><a href="{{path('new_session')}}"> Créer un stagiaire</a></button> #}
-    <table>
-        <tbody>
-            {% if sessions |length >=1 %}
+    {# <button type="button" class="btn btn-outline-dark"><a href="{{path('new_session')}}"> Créer un stagiaire</a></button> #}
+    {% if sessions |length >=1 %}
+        <table>
+            <tbody>
                 {% for session in sessions %}
                     <tr>
                         <td>{{session}}</td>
                     </tr>
                 {% endfor %}
-            {% else %}
-                <tr>
-                    <td>Aucune session</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune session!</p>
+    {% endif %}
 
 {% endblock %}

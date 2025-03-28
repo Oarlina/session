@@ -8,13 +8,20 @@
         .homeNav, .sesionNav, .internNav{color : black;}
         .categoryNav{color: #006eff;}
     </style>
-
-    <a href="{{ path('new_category') }}"><button>Créer une catégorie</button></a>
-
+    <h3>Liste des catégories : </h3>
+    <button class="btn btn-outline-dark"><a href="{{ path('new_category') }}" class="black">Créer une catégorie</a></button>
+    <br><br>
     {% if categories == null %}
         <p>Aucune catégorie</p>
     {% else  %}
         <table class="table table-striped">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Nom Catégorie</th>
+                    <th scope="col">Modifier</th>
+                    <th scope="col">Supprimer</th>
+                </tr>
+            </thead>
             <tbody>
                 {% for category in categories %}
                     <tr>
@@ -26,5 +33,4 @@
             </tbody>
         </table>   
     {% endif %}     
-
 {% endblock %}

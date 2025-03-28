@@ -16,7 +16,7 @@ final class StagiairesController extends AbstractController
     #[Route('/stagiaires', name: 'app_interns')]
     public function index(InternRepository $internRepository): Response
     {
-        $interns = $internRepository->findAll();
+        $interns = $internRepository->findBy([],['name'=> 'ASC']);
         return $this->render('intern/index.html.twig', [
             'interns' => $interns,
         ]);

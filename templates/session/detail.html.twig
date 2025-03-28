@@ -5,11 +5,10 @@
 {% block body %}
     {# Pour changer la couleur de la navbar et montrer sur quel page je suis #}
     <style>
-        .homeNav, .internNav, .categoryNav{color : black;}
-        .sesionNav{color: #006eff;}
+        .homeNav, .internNav, .categoryNav, .sesionNav{color : black;}
     </style>
     <h3>{{session.nameSession}} : </h3>
-    {# <button><a href="{{path('new_session')}}">Créer une session</a></button> #}
+    {# <button type="button" class="btn btn-outline-dark"><a href="{{path('new_session')}}">Créer une session</a></button> #}
 
     <table class="table table-stripped">
         <thead>
@@ -38,7 +37,7 @@
     </table>
     <br>
     <h3>Liste des stagiaires inscrit :</h3>
-    <button>Ajouter un stagiaire</button>
+    <button type="button" class="btn btn-outline-dark">Ajouter un stagiaire</button>
     <table class="table table-stripped">
         <thead>
             <tr class="table-primary">
@@ -60,7 +59,7 @@
     </table>
     <br>
     <h3>Liste des modules : </h3>
-    <button>Ajouter un module</button>
+    <button type="button" class="btn btn-outline-dark">Ajouter un module</button>
     <table class="table table-stripped">
         <thead>
             <tr class="table-primary">
