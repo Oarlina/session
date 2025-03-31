@@ -57,14 +57,19 @@ final class SessionsController extends AbstractController
         return $this->redirectToRoute('app_sessions');
     }
 
-    #[Route('/session/remove/intern/{id}/{idSession}', name:'remove_intern')]
-    public function remove_intern (Intern $intern, Session $session, SessionRepository $sessionRepository) :Response
+    #[Route('/session/{idSession}/removeIntern/{idIntern}', name:'remove_intern')]
+    public function remove_intern ($idSession, $idIntern,  SessionRepository $sessionRepository, InternRepository $internRepository, EntityManagerInterface $entityManager) :Response
     {
-        $intern = $sessionRepository->removeIntern($intern->getId());
-        dd($intern);
-        return $this->redirectToRoute('detail_session');
+        $session = $sessionRepository->findBy(['id'=> $idSession]);
+        $intern = $internRepository->findBy(['id'=>$idIntern]);
+        $session = $session[0];
+        $intern = $session->removeIntern($intern[0]);
+        // dd($intern);
+        $entityManager->persist($intern);
+        $entityManager->flush();
+        return $this->redirectToRoute('detail_session', ['id'=> $session->getId()] );
     }
-    
+
     #[Route('/session/{id}', name:'detail_session')]
     public function detail (Session $session, InternRepository $internRepository) :Response
     {

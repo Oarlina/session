@@ -16,6 +16,10 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
+    public function newIntern(){
+
+        
+    }
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */

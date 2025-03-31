@@ -57,7 +57,7 @@
                 {% for intern in session.interns %}
                 <tr>
                     <td><a href="{{path('detail_intern', {'id':intern.id})}}" class="black">{{intern.names}}</a></td>
-                    <td><a href="{{path('remove_intern', {'id':intern.id, 'idSession': session.id})}}" class="black">Désinscrire</a></td>
+                    <td><a href="{{path('remove_intern', {'idIntern':intern.id, 'idSession': session.id})}}" class="black">Désinscrire</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
