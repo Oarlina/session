@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Repository\CourseRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +35,6 @@ final class CategoriesController extends AbstractController
         // on dit que l'on veut traiter le formulaire 
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()){
             $category = $form->getData();
 
@@ -59,9 +59,10 @@ final class CategoriesController extends AbstractController
     }
 
     #[Route('/category/{id}/detail', name:'detail_category')]
-    public function detail(Category $category, CategoryRepository $categoryRepository) : Response
+    public function detail(Category $category, CategoryRepository $categoryRepository, CourseRepository $courseRepository) : Response
     {
-        $category = $categoryRepository->findBy([], ['courses' => 'ASC']);
-        return $this->render('category/detail.html.twig', ['category' => $category]);
+        $courses = $courseRepository->findBy(['category'=> $category->getId()], ['nameCourse' => 'ASC']);
+        // dd($category);
+        return $this->render('category/detail.html.twig', ['category'=> $category, 'courses' => $courses]);
     }
 }
