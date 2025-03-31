@@ -176,7 +176,6 @@ class Session
         return $restant;
     }
 
-
     public function __toString(){
         return $this->nameSession;
         return $this->beginSession->format('d/m/Y');

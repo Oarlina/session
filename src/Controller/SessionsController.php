@@ -66,10 +66,12 @@ final class SessionsController extends AbstractController
     }
     
     #[Route('/session/{id}', name:'detail_session')]
-    public function detail (Session $session) :Response
+    public function detail (Session $session, InternRepository $internRepository) :Response
     {
+        $nonInscrit = $internRepository->findAll();
         return $this->render('session/detail.html.twig', [
-            'session' => $session
+            'session' => $session,
+            'nbInterns' => count($nonInscrit)
         ]);
     }
 }
