@@ -47,7 +47,7 @@ class SessionType extends AbstractType
             ->add('Valider', SubmitType::class, array('attr'=> ['class' => 'btn btn-success']))
         ;
     }
-
+   
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

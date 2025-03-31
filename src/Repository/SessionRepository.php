@@ -16,9 +16,28 @@ class SessionRepository extends ServiceEntityRepository
         parent::__construct($registry, Session::class);
     }
 
-    public function newIntern(){
+    public function findNonInscrits($session_id) {
+        // on va cree une requete embriqué 
+        $em = $this->getEntityManager(); // on recupere l'entity manager
+        $sub = $em->createQueryBuilder(); // appelle la méthode pour construire la requette
 
+        $qb = $sub; // on cree une nouvelle variable ou on donne la méthode pour faire une requete
+        // on cree la requete DQL
+        $qb->select('s') // donne un alias a la table que l'ont recupere
+            ->from('App\Entity\Intern', 's') // on donne la table que l'on prend et donne son alias
+            ->leftJoin('s.sessions', 'se') // on fait un left join sur la table sessions
+            ->where('se.id = :id'); // ou l'id de la table session est egale a id du stagiaire
+         
+        $sub = $em->createQueryBuilder(); // appelle la méthode pour construire la requette
+        //on cree la requette DQL
+        $sub->select('st') // on donne un alias a la table
+            -> from('App\Entity\Intern', 'st') // on donne la table que l'on cherche
+            ->where($sub->expr()->notIn('st.id', $qb->getDQL())) // on dit que l'on veut tous les stagiaires qui ne sont pas dans le session
+            ->setParameter ('id', $session_id) // on donne a id la vaaleur de sesssion_id
+            ->orderBy('st.name'); // et on ordnonne les réponses par les nom des stagiares
         
+        $query = $sub->getQuery(); // on recupere la requete sub
+        return $query->getResult(); // on retourne la requette DQL
     }
     //    /**
     //     * @return Session[] Returns an array of Session objects

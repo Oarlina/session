@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Intern;
 use App\Entity\Session;
 use App\Form\SessionType;
+use App\Form\InternSessionType;
 use App\Repository\InternRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,13 +71,42 @@ final class SessionsController extends AbstractController
         return $this->redirectToRoute('detail_session', ['id'=> $session->getId()] );
     }
 
-    #[Route('/session/{id}', name:'detail_session')]
-    public function detail (Session $session, InternRepository $internRepository) :Response
+    #[Route('/session/{idSession}/newIntern', name:'new_intern_session')]
+    public function new_intern ($idSession, Request $request, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) :Response
     {
-        $nonInscrit = $internRepository->findAll();
+        $session = $sessionRepository->findBy(['id'=> $idSession]);
+        $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
+        $interns = $sessionRepository->findNonInscrits( $session->getId() );
+        // dd($interns);
+
+        $form = $this->createForm(InternSessionType::class, $session);
+        $form->handleRequest($request);
+        // dd($form);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $session = $form->getData();
+            $session->getId($session->getId());
+            $entityManager->persist($session);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
+        }
+
+        return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns] );
+    }
+
+
+
+    #[Route('/session/{id}', name:'detail_session')]
+    public function detail (Session $session = null, SessionRepository $sessionRepository, InternRepository $internRepository) :Response
+    {
+        $nonInscrits = $sessionRepository->findNonInscrits( $session->getId() );
+        $interns = $internRepository->findAll();
+
         return $this->render('session/detail.html.twig', [
             'session' => $session,
-            'nbInterns' => count($nonInscrit)
+            'nbInterns' => count($interns),
+            'nonInscrits' => $nonInscrits
         ]);
     }
 }

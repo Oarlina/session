@@ -44,7 +44,9 @@
     <br>
 
     <h3>Liste des stagiaires inscrit :</h3>
-    <button type="button" class="btn btn-outline-dark">Ajouter un stagiaire</button>
+    <button type="button" class="btn btn-outline-dark">
+        <a href="{{path('new_intern_session', {'idSession' : session.id})}}" class="black">Ajouter un stagiaire</a>
+    </button>
     {% if session.interns | length >=1 %}
         <table class="table table-stripped">
             <thead>

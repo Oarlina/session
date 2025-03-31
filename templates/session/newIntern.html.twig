@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'un module {% endblock %}
+
+{% block body %}
+    <style>
+        .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
+    </style>
+        <h2>Attention les prénoms grisés sont ceux déjà sélectionnés pour les gardéw sélectionnés 
+            apuyer sur alt et choissisez les autres stagiaires à prendre</h2>
+        {{form(formInternSession)}}
+{% endblock %}
