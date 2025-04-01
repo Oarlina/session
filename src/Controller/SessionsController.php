@@ -116,13 +116,17 @@ final class SessionsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $program = $form->getData();
             $program->setSession($session);
-            
+            // dd($program->getNbDay());
+            // dd((int)date_diff($session->getBeginSession(), $session->getFinishSession())->format('%d'));
             // on cherche si le module est déjà dans la session
             $programTest = $programRepository->findBy(['course' => $program->getCourse(), 'session' => $session->getId()]);
             // si on en trouve on retourne au formulaire et signale que le module existe déjà dedans
-            
+            $duree = (int)date_diff($session->getBeginSession(), $session->getFinishSession())->format('%d');
             if ($programTest != []){ // si programTest n'est pas un tableau vide alors il existe deja
                 $error = "Le module existe déjà";
+                return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
+            }else if ($program->getNbDay() > $duree){
+                $error = "Le module peut durée MAXIMUM ". $duree. " jours.";
                 return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
             }
 
@@ -135,8 +139,8 @@ final class SessionsController extends AbstractController
         return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => ''] );
     }
 
-    #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_course')]
-    public function delete_course ($idSession, $idCourse, CourseRepository $courseRepository,  ProgramRepository $programRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) : Response {
+    #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_courseS')]
+    public function delete_courseS ($idSession, $idCourse, CourseRepository $courseRepository,  ProgramRepository $programRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) : Response {
         // $program = $programRepository->findBy(['id' => $idProgram]);
         $session = $sessionRepository->findBy(['id'=>$idSession])[0]; 
         $course = $courseRepository->findBy(['id'=>$idCourse])[0];

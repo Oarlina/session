@@ -44,9 +44,13 @@
     <br>
 
     <h3>Liste des stagiaires inscrit :</h3>
-    <button type="button" class="btn btn-outline-dark">
-        <a href="{{path('new_intern_session', {'idSession' : session.id})}}" class="black">Ajouter un stagiaire</a>
-    </button>
+    {# si j'ai atteint la limite de stagiaire alors je retire le boutton #}
+    {% if session.restant !=0 %}
+        <button type="button" class="btn btn-outline-dark"> 
+            <a href="{{path('new_intern_session', {'idSession' : session.id})}}" class="black">Ajouter un stagiaire</a>
+        </button>
+    {% endif %}
+
     {% if session.interns | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -88,7 +92,7 @@
                         <td>{{program.course.nameCourse}}</td>
                         <td>{{program.nbDay}} jours</td>
                         <td>{{program.course.category.nameCategory}}</td>
-                        <td><a href="{{path('delete_course', {'idSession' : session.id, 'idCourse' : program.course.id})}}" class="black"><i class="fa-solid fa-trash"></i></a></td>
+                        <td><a href="{{path('delete_courseS', {'idSession' : session.id, 'idCourse' : program.course.id})}}" class="black"><i class="fa-solid fa-trash"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -96,5 +100,4 @@
         {% else %}
             <p>Aucun module</p>
         {% endif %}
-
 {% endblock %}

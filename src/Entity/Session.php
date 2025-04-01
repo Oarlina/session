@@ -176,9 +176,15 @@ class Session
         return $restant;
     }
 
+    public function duree(){
+        $date = date_diff($this->beginSession, $this->finishSession);
+        return $date->format('%d') ;
+    }
+
     public function __toString(){
         return $this->nameSession;
         return $this->beginSession->format('d/m/Y');
         return $this->finishSession->format('d/m/Y');
+        return $this->duree->format('d');
     }
 }
