@@ -15,13 +15,11 @@ class InternSessionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $a = $options['data']->getNbPlace();
         $builder
             ->add('interns', EntityType::class, [
                     'class' => Intern::class,
                     'choice_label' => 'names',
                     'multiple' => true,
-                    // 'max' => $a,
                     'attr' =>['class'=> 'form-control']
                 ])
             ->add('Valider', SubmitType::class, array('attr'=> ['class'=> 'btn btn-success']))

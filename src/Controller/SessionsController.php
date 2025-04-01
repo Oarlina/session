@@ -77,22 +77,28 @@ final class SessionsController extends AbstractController
         $session = $sessionRepository->findBy(['id'=> $idSession]);
         $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
         $interns = $sessionRepository->findNonInscrits( $session->getId() );
-        // dd($interns);
 
         $form = $this->createForm(InternSessionType::class, $session);
         $form->handleRequest($request);
-        // dd($form);
+        
         if ($form->isSubmitted() && $form->isValid())
         {
             $session = $form->getData();
             $session->getId($session->getId());
+            
+            //si le nombre d'intenr sélectionner est supérieur au nombre de place alors on affiche une erreur
+            if (count($session->getInterns()) > $session->getNbPlace()){
+                $error = "Trop de stagiaire sélectionnés veuillé en selectionnés MAXIMUM ". $session->getNbPlace();
+                return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' =>$error] );
+            }
+
             $entityManager->persist($session);
             $entityManager->flush();
 
             return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
         }
 
-        return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns] );
+        return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' => ''] );
     }
 
 

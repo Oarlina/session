@@ -14,5 +14,8 @@
 body {
     width: 100%;
      
-    
+    .error{
+        color: red;
+        font-size: xx-large;
+    }
 }
