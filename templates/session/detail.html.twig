@@ -79,7 +79,6 @@
                     <th>Module</th>
                     <th>Duréee</th>
                     <th>Catégorie</th>
-                    <th>Modifié</th>
                     <th>Supprimé</th>
                 </tr>
             </thead>
@@ -89,8 +88,7 @@
                         <td>{{program.course.nameCourse}}</td>
                         <td>{{program.nbDay}} jours</td>
                         <td>{{program.course.category.nameCategory}}</td>
-                        <td><a href="" class="black"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                        <td><a href="" class="black"><i class="fa-solid fa-trash"></i></a></td>
+                        <td><a href="{{path('delete_course', {'idSession' : session.id, 'idCourse' : program.course.id})}}" class="black"><i class="fa-solid fa-trash"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
