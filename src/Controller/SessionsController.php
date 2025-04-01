@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Intern;
 use App\Entity\Session;
+use App\Form\ProgramType;
 use App\Form\SessionType;
-use App\Form\InternSessionType;
+use App\Form\SessionInternType;
+use App\Repository\CourseRepository;
 use App\Repository\InternRepository;
+use App\Repository\ProgramRepository;
 use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,30 +81,61 @@ final class SessionsController extends AbstractController
         $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
         $interns = $sessionRepository->findNonInscrits( $session->getId() );
 
-        $form = $this->createForm(InternSessionType::class, $session);
+        $form = $this->createForm(SessionInternType::class, $session);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid())
         {
             $session = $form->getData();
             $session->getId($session->getId());
-            
             //si le nombre d'intenr sélectionner est supérieur au nombre de place alors on affiche une erreur
             if (count($session->getInterns()) > $session->getNbPlace()){
                 $error = "Trop de stagiaire sélectionnés veuillé en selectionnés MAXIMUM ". $session->getNbPlace();
-                return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' =>$error] );
+                return $this->render('session/newIntern.html.twig', ['formSessionIntern'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' =>$error] );
             }
-
             $entityManager->persist($session);
             $entityManager->flush();
 
             return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
         }
 
-        return $this->render('session/newIntern.html.twig', ['formInternSession'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' => ''] );
+        return $this->render('session/newIntern.html.twig', ['formSessionIntern'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' => ''] );
     }
 
+    #[Route('/session/{idSession}/newProgram', name:"new_program")]
+    public function new_program ($idSession, SessionRepository $sessionRepository, Request $request, CourseRepository $courseRepository, ProgramRepository $programRepository, EntityManagerInterface $entityManager) : Response 
+    {
+        $session = $sessionRepository->findBy(['id'=> $idSession]);
+        $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
 
+        $course = $courseRepository->findAll();
+        $program = $programRepository->findAll();
+        $program = $program[0];
+        
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request); 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $program = $form->getData();
+            $program->setSession($session);
+            // dd($program);
+            
+            // on cherche si la session est deja dans un programme
+            $sessionTest = $programRepository->findBy(['session' => $session->getId()]);
+            $programTest = $programRepository->findBy(['course' => $program->getCourse()]);
+            // si on en trouve on retourne au formulaire et signale que le module existe déjà dedans
+            if (!($programTest == []) && !($sessionTest == [])){
+                $error = "Le module existe déjà";
+                return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
+            }
+            
+            $entityManager->persist($program);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
+
+        }
+        return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => ''] );
+    }
 
     #[Route('/session/{id}', name:'detail_session')]
     public function detail (Session $session = null, SessionRepository $sessionRepository, InternRepository $internRepository) :Response

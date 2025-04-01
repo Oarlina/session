@@ -18,4 +18,7 @@ body {
         color: red;
         font-size: xx-large;
     }
+    .multiple-form{
+        height: 15rem;
+    }
 }

@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class InternSessionType extends AbstractType
+class SessionInternType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,7 +20,7 @@ class InternSessionType extends AbstractType
                     'class' => Intern::class,
                     'choice_label' => 'names',
                     'multiple' => true,
-                    'attr' =>['class'=> 'form-control']
+                    'attr' =>['class'=> 'form-control multiple-form']
                 ])
             ->add('Valider', SubmitType::class, array('attr'=> ['class'=> 'btn btn-success']))
         ;
