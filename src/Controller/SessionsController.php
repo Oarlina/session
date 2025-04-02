@@ -96,35 +96,22 @@ final class SessionsController extends AbstractController
     {
         $session = $sessionRepository->findOneBy(['id'=> $idSession]);
         $course = $courseRepository->findOneBy(['id' => $idCourse]);
-        // dd($course);
+
         $program = new Program();
-        
-        $form = $this->createForm(ProgramType::class, $program);
-        $form->handleRequest($request); 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $program = $form->getData();
+        // je verifie que le bouton à été cliqué
+        if (isset($_POST['submit']))
+        {
+            $nbDay = $request->request->get('nbDay'); // je récupère la valeur du nombre de jour donnée
+            // je met mes informations dans program
             $program->setSession($session);
             $program->setCourse($course);
-
-            // on cherche si le module est déjà dans la session
-            $programTest = $programRepository->findBy(['course' => $program->getCourse(), 'session' => $session->getId()]);
-            // si on en trouve on retourne au formulaire et signale que le module existe déjà dedans
-            $duree = (int)date_diff($session->getBeginSession(), $session->getFinishSession())->format('%d');
-
-            if ($programTest != []){ // si programTest n'est pas un tableau vide alors il existe deja
-                $error = "Le module existe déjà";
-                return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
-            }else if ($program->getNbDay() > $duree){
-                $error = "Le module peut durée MAXIMUM ". $duree. " jours.";
-                return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
-            }
-
+            $program->setNbDay($nbDay);
+            // je l'ajoute dans la base de données
             $entityManager->persist($program);
             $entityManager->flush();
-
-            return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
+            // je retourne sur la page détaail de la session
         }
-        return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'course' => $course] );
+        return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
     }
 
     #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_courseS')]

@@ -8,7 +8,7 @@
         .homeNav, .internNav, .categoryNav, .sesionNav{color : black;}
     </style>
     <h3>{{session.nameSession}} : </h3>
-
+    {# ce sont les informations de la session #}
     <table class="table table-stripped">
         <thead>
             {# La tete du tableau sera en deux ligne afin de gagner de la pace pour le nombre de place de la session #}
@@ -43,8 +43,8 @@
     </table>
     <br>
 
-    <h3>Liste des stagiaires inscrit :</h3>
     {# Partie des stagiaires incrits  #}
+    <h3>Liste des stagiaires inscrit :</h3>
     {% if session.interns | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -67,6 +67,8 @@
     {% else %} 
         <p>Aucun stagiaire inscrit!</p> 
     {% endif %}
+
+
     {# Partie qui permet l'ajout d'un stagiaire #}
     {% if session.restant !=0 %}
         <table class="table table-stripped">
@@ -90,12 +92,9 @@
     {% endif %}
     <br>
 
-    <h3>Liste des modules : </h3>
 
-    {# <button type="button" class="btn btn-outline-dark">
-        <a href="{{path('new_program', {'idSession': session.id})}}" class="black">Ajouter un module</a>
-    </button> #}
     {# Partie des modules inscrits #}
+    <h3>Liste des modules : </h3>
     {% if session.programs | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -120,14 +119,17 @@
     {% else %}
         <p>Aucun module</p>
     {% endif %}
+
+
     {# Partie qui permet l'ajout d'un module #}
     <h3>Liste de modules non inscrit: </h3>
+    {% if courseNotIn | length >=1 %}
         <table class="table table-stripped">
             <thead>
                 <tr class="table-primary">
                     <th>Module</th>
-                    <th>Duréee</th>
                     <th>Catégorie</th>
+                    <th>Durée </th>
                     <th>Ajouter</th>
                 </tr>
             </thead>
@@ -135,16 +137,19 @@
                 {% for course in courseNotIn %}
                     <tr>
                         <td>{{course.nameCourse}}</td>
-                        <td>... jours</td>
                         <td>{{course.category.nameCategory}}</td>
-                        <td>
-                            <a href="{{path('new_program', {'idSession': session.id, 'idCourse' : course.id})}}" class="black">
-                                <i class="fa-solid fa-plus"></i>
-                            </a>
-                        </td>
+                        <form action="{{path('new_program', {'idSession': session.id, 'idCourse' : course.id})}}" method="POST">
+                            <td>
+                                <input type="number" name="nbDay" min="0" style="width:60px" max="{{session.duree}}"> jours
+                            </td>
+                            <td class="black">
+                                <input type="Submit" name="submit" value="+">
+                        </form>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
+    {% else %}
+        <p>Aucun module</p>
+    {% endif %}
 {% endblock %}
