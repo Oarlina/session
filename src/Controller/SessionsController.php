@@ -66,41 +66,29 @@ final class SessionsController extends AbstractController
     public function remove_intern ($idSession, $idIntern,  SessionRepository $sessionRepository, InternRepository $internRepository, EntityManagerInterface $entityManager) :Response
     {
         $session = $sessionRepository->findBy(['id'=> $idSession]);
-        $intern = $internRepository->findBy(['id'=>$idIntern]);
+        $intern = $internRepository->findBy(['id'=>$idIntern])[0];
         $session = $session[0];
-        $intern = $session->removeIntern($intern[0]);
-    
+        // dd($session);
+        $intern = $session->removeIntern($intern);
         $entityManager->persist($intern);
         $entityManager->flush();
         return $this->redirectToRoute('detail_session', ['id'=> $session->getId()] );
     }
 
-    #[Route('/session/{idSession}/newIntern', name:'new_intern_session')]
-    public function new_intern ($idSession, Request $request, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) :Response
+    #[Route('/session/{idSession}/newIntern/{idIntern}', name:'new_intern_session')]
+    public function new_intern ($idSession, $idIntern, SessionRepository $sessionRepository, InternRepository $internRepository, EntityManagerInterface $entityManager) :Response
     {
-        $session = $sessionRepository->findBy(['id'=> $idSession]);
-        $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
-        $interns = $sessionRepository->findNonInscrits( $session->getId() );
-
-        $form = $this->createForm(SessionInternType::class, $session);
-        $form->handleRequest($request);
+        // je recupere session et intern
+        $session = $sessionRepository->findOneBy(['id'=> $idSession]);
+        $intern = $internRepository->findOneBy(['id' => $idIntern]);
+        // je donne les varleurs a session
+        $session->getId($session->getId());
+        $session->addIntern($intern);
+        // et je faais l'ajout dans la bdd
+        $entityManager->persist($session);
+        $entityManager->flush();
         
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $session = $form->getData();
-            $session->getId($session->getId());
-            //si le nombre d'intenr sélectionner est supérieur au nombre de place alors on affiche une erreur
-            if (count($session->getInterns()) > $session->getNbPlace()){
-                $error = "Trop de stagiaire sélectionnés veuillé en selectionnés MAXIMUM ". $session->getNbPlace();
-                return $this->render('session/newIntern.html.twig', ['formSessionIntern'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' =>$error] );
-            }
-            $entityManager->persist($session);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
-        }
-
-        return $this->render('session/newIntern.html.twig', ['formSessionIntern'=> $form, 'id'=> $session->getId(), 'interns' => $interns, 'error' => ''] );
+        return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
     }
 
     #[Route('/session/{idSession}/newProgram', name:"new_program")]
@@ -140,7 +128,8 @@ final class SessionsController extends AbstractController
     }
 
     #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_courseS')]
-    public function delete_courseS ($idSession, $idCourse, CourseRepository $courseRepository,  ProgramRepository $programRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) : Response {
+    public function delete_courseS ($idSession, $idCourse, CourseRepository $courseRepository,  ProgramRepository $programRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) : Response 
+    {
         // $program = $programRepository->findBy(['id' => $idProgram]);
         $session = $sessionRepository->findBy(['id'=>$idSession])[0]; 
         $course = $courseRepository->findBy(['id'=>$idCourse])[0];

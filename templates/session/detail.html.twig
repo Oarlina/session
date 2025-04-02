@@ -45,12 +45,11 @@
 
     <h3>Liste des stagiaires inscrit :</h3>
     {# si j'ai atteint la limite de stagiaire alors je retire le boutton #}
-    {% if session.restant !=0 %}
-        <button type="button" class="btn btn-outline-dark"> 
+    {# {% if session.restant !=0 %} #}
+        {# <button type="button" class="btn btn-outline-dark"> 
             <a href="{{path('new_intern_session', {'idSession' : session.id})}}" class="black">Ajouter un stagiaire</a>
         </button>
-    {% endif %}
-
+    {% endif %} #}
     {% if session.interns | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -70,6 +69,24 @@
         </table> 
         {% else %} 
         <p>Aucun stagiaire inscrit!</p> 
+        {% endif %}
+        {% if session.restant !=0 %}
+        <table class="table table-stripped">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Nom Prénom dd</th>
+                    <th scope="col">Inscrire</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intern in nonInscrits %}
+                <tr>
+                    <td><a href="{{path('detail_intern', {'id':intern.id})}}" class="black">{{intern.names}}</a></td>
+                    <td><a href="{{path('new_intern_session', {'idSession' : session.id, 'idIntern' : intern.id})}}" class="black">Inscrire</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
         {% endif %}
     <br>
     <h3>Liste des modules : </h3>
