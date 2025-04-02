@@ -23,10 +23,10 @@ class ProgramType extends AbstractType
             //     'class' => Session::class,
             //     'choice_label' => 'id',
             // ])
-            ->add('course', EntityType::class, [
-                'class' => Course::class,
-                'choice_label' => 'nameCourse',
-            ])
+            // ->add('course', EntityType::class, [
+            //     'class' => Course::class,
+            //     'choice_label' => 'nameCourse',
+            // ])
             ->add('Valider', SubmitType::class, array('attr' => ['class' => 'btn btn-success']))
         ;
     }

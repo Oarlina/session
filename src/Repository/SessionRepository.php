@@ -39,6 +39,29 @@ class SessionRepository extends ServiceEntityRepository
         $query = $sub->getQuery(); // on recupere la requete sub
         return $query->getResult(); // on retourne la requette DQL
     }
+
+    public function NonCourse($session_id) {
+        $entityManager = $this->getEntityManager();
+        $sub = $entityManager->createQueryBuilder();
+        
+        $qb = $sub;
+        // on cree la premiere requette
+        $qb->select('c')
+            ->from('App\Entity\Course', 'c')
+            ->leftJoin('c.programs', 'p')
+            ->where('p.session = :id');
+        $sub = $entityManager->createQueryBuilder();
+        // on cree la requete embriqué 
+        $sub->select('cc')
+            ->from('App\Entity\Course', 'cc')
+            ->where($sub->expr()->notIn('cc.id', $qb->getDQL()))
+            ->setParameter('id', $session_id)
+            ->orderBy('cc.category, cc.nameCourse'); // il triera d'abord par l'id de la category puis par le nom du module
+        
+        // on renvoie le resultat
+        $query = $sub->getQuery();
+        return $query->getResult();
+    }
     //    /**
     //     * @return Session[] Returns an array of Session objects
     //     */

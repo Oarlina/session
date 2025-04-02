@@ -91,12 +91,12 @@ final class SessionsController extends AbstractController
         return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
     }
 
-    #[Route('/session/{idSession}/newProgram', name:"new_program")]
-    public function new_program ($idSession, SessionRepository $sessionRepository, Request $request, CourseRepository $courseRepository, ProgramRepository $programRepository, EntityManagerInterface $entityManager) : Response 
+    #[Route('/session/{idSession}/newProgram/{idCourse}', name:"new_program")]
+    public function new_program ($idSession, $idCourse, SessionRepository $sessionRepository, Request $request, CourseRepository $courseRepository, ProgramRepository $programRepository, EntityManagerInterface $entityManager) : Response 
     {
-        $session = $sessionRepository->findBy(['id'=> $idSession]);
-        $session = $session[0]; // pour récuyperer la premiere et unique valeur du tableau donnée
-        $course = $courseRepository->findAll();
+        $session = $sessionRepository->findOneBy(['id'=> $idSession]);
+        $course = $courseRepository->findOneBy(['id' => $idCourse]);
+        // dd($course);
         $program = new Program();
         
         $form = $this->createForm(ProgramType::class, $program);
@@ -104,12 +104,13 @@ final class SessionsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $program = $form->getData();
             $program->setSession($session);
-            // dd($program->getNbDay());
-            // dd((int)date_diff($session->getBeginSession(), $session->getFinishSession())->format('%d'));
+            $program->setCourse($course);
+
             // on cherche si le module est déjà dans la session
             $programTest = $programRepository->findBy(['course' => $program->getCourse(), 'session' => $session->getId()]);
             // si on en trouve on retourne au formulaire et signale que le module existe déjà dedans
             $duree = (int)date_diff($session->getBeginSession(), $session->getFinishSession())->format('%d');
+
             if ($programTest != []){ // si programTest n'est pas un tableau vide alors il existe deja
                 $error = "Le module existe déjà";
                 return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => $error] );
@@ -122,9 +123,8 @@ final class SessionsController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
-
         }
-        return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'error' => ''] );
+        return $this->render('session/newProgram.html.twig', ['formProgram'=> $form, 'id'=> $session->getId(), 'course' => $course] );
     }
 
     #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_courseS')]
@@ -148,11 +148,14 @@ final class SessionsController extends AbstractController
     {
         $nonInscrits = $sessionRepository->findNonInscrits( $session->getId() );
         $interns = $internRepository->findAll();
+        $courseNotIn = $sessionRepository->NonCourse($session->getId());
+        // dd($courseNotIn);
 
         return $this->render('session/detail.html.twig', [
             'session' => $session,
             'nbInterns' => count($interns),
-            'nonInscrits' => $nonInscrits
+            'nonInscrits' => $nonInscrits,
+            'courseNotIn' => $courseNotIn
         ]);
     }
 }

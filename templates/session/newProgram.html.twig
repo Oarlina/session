@@ -6,9 +6,7 @@
     <style>
         .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
     </style>
-    <h4>Attention les modules grisés sont ceux déjà sélectionnés pour les gardés sélectionnés apuyer sur alt et choissisez les autres modules à prendre</h4>
-        {% if error %}
-            <p class="error">{{error}}</p>
-        {% endif %}
+    
+    <h3>Module de {{course.nameCourse}}</h3>
         {{form(formProgram)}}
 {% endblock %}

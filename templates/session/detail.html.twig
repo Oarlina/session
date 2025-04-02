@@ -44,12 +44,7 @@
     <br>
 
     <h3>Liste des stagiaires inscrit :</h3>
-    {# si j'ai atteint la limite de stagiaire alors je retire le boutton #}
-    {# {% if session.restant !=0 %} #}
-        {# <button type="button" class="btn btn-outline-dark"> 
-            <a href="{{path('new_intern_session', {'idSession' : session.id})}}" class="black">Ajouter un stagiaire</a>
-        </button>
-    {% endif %} #}
+    {# Partie des stagiaires incrits  #}
     {% if session.interns | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -62,15 +57,18 @@
                 {% for intern in session.interns %}
                 <tr>
                     <td><a href="{{path('detail_intern', {'id':intern.id})}}" class="black">{{intern.names}}</a></td>
-                    <td><a href="{{path('remove_intern', {'idIntern':intern.id, 'idSession': session.id})}}" class="black">Désinscrire</a></td>
+                    <td><a href="{{path('remove_intern', {'idIntern':intern.id, 'idSession': session.id})}}" class="black">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table> 
-        {% else %} 
+    {% else %} 
         <p>Aucun stagiaire inscrit!</p> 
-        {% endif %}
-        {% if session.restant !=0 %}
+    {% endif %}
+    {# Partie qui permet l'ajout d'un stagiaire #}
+    {% if session.restant !=0 %}
         <table class="table table-stripped">
             <thead>
                 <tr class="table-primary">
@@ -82,17 +80,22 @@
                 {% for intern in nonInscrits %}
                 <tr>
                     <td><a href="{{path('detail_intern', {'id':intern.id})}}" class="black">{{intern.names}}</a></td>
-                    <td><a href="{{path('new_intern_session', {'idSession' : session.id, 'idIntern' : intern.id})}}" class="black">Inscrire</a></td>
+                    <td><a href="{{path('new_intern_session', {'idSession' : session.id, 'idIntern' : intern.id})}}" class="black">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table> 
-        {% endif %}
+    {% endif %}
     <br>
+
     <h3>Liste des modules : </h3>
-    <button type="button" class="btn btn-outline-dark">
+
+    {# <button type="button" class="btn btn-outline-dark">
         <a href="{{path('new_program', {'idSession': session.id})}}" class="black">Ajouter un module</a>
-    </button>
+    </button> #}
+    {# Partie des modules inscrits #}
     {% if session.programs | length >=1 %}
         <table class="table table-stripped">
             <thead>
@@ -114,7 +117,34 @@
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-            <p>Aucun module</p>
-        {% endif %}
+    {% else %}
+        <p>Aucun module</p>
+    {% endif %}
+    {# Partie qui permet l'ajout d'un module #}
+    <h3>Liste de modules non inscrit: </h3>
+        <table class="table table-stripped">
+            <thead>
+                <tr class="table-primary">
+                    <th>Module</th>
+                    <th>Duréee</th>
+                    <th>Catégorie</th>
+                    <th>Ajouter</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courseNotIn %}
+                    <tr>
+                        <td>{{course.nameCourse}}</td>
+                        <td>... jours</td>
+                        <td>{{course.category.nameCategory}}</td>
+                        <td>
+                            <a href="{{path('new_program', {'idSession': session.id, 'idCourse' : course.id})}}" class="black">
+                                <i class="fa-solid fa-plus"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
 {% endblock %}
