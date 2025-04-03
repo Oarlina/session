@@ -33,17 +33,11 @@ class SessionType extends AbstractType
                     'min' => 1, // ma valeur minimum est de 1 afin d'éviter de créer une session ou personne ne peut être inscrit
                     'class'=> 'form-control']
             ))
-            // ->add('user', EntityType::class, [
-            //     'class' => User::class,
-            //     'choice_label' => 'id',
-            //     'attr' =>['class'=> 'form-control']
-            // ])
-            // ->add('interns', EntityType::class, [
-            //     'class' => Intern::class,
-            //     'choice_label' => 'names',
-            //     'multiple' => true,
-            //     'attr' =>['class'=> 'form-control']
-            // ])
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'names',
+                'attr' =>['class'=> 'form-control']
+            ])
             ->add('Valider', SubmitType::class, array('attr'=> ['class' => 'btn btn-success']))
         ;
     }

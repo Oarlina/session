@@ -107,4 +107,8 @@ class User
 
         return $this;
     }
+    public function names(): string 
+    {
+        return $this->name. ' '. $this->forname;
+    }
 }

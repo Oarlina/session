@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire d'un module {% endblock %}
+
+{% block body %}
+    <style>
+        .homeNav, .sesionNav, .internNav, .categoryNav{color : black;}
+    </style>
+    {% if edit %}
+        <h3>Modifer un utilisateur</h3>
+    {% else %}
+        <h3>Ajouter un utilisateur</h3>
+    {% endif %}
+     
+    {{form_start(formUser)}}  
+        <div class="row">
+            <div class="col-sm">{{form_row(formUser.name)}}</div>
+            <div class="col-sm">{{form_row(formUser.forname)}}</div>
+        </div>
+        <div class="col-sm">{{form_row(formUser.city)}}</div>
+        <div class="row">
+            <div class="col-sm">{{form_row(formUser.email)}}</div>
+            <div class="col-sm">{{form_row(formUser.phoneNumber)}}</div>
+        </div>
+        {{form_row(formUser.roles)}}
+    {{ form_end(formUser) }}
+{% endblock %}
