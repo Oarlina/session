@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Repository\SessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,8 +58,9 @@ final class UserController extends AbstractController
     }
 
     #[Route('/user/{id}', name:'detail_user')]
-    public function detail (User $user) :Response
+    public function detail (User $user, SessionRepository  $sessionRepository) :Response
     {
-        return $this->render('user/detail.html.twig', ['user' => $user]);
+        $sessions = $sessionRepository->findBy(['user' => $user], ['beginSession' => 'ASC', 'finishSession' => 'ASC']);
+        return $this->render('user/detail.html.twig', ['user' => $user, 'sessions' =>$sessions]);
     }
 }

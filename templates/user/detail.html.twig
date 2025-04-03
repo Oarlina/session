@@ -18,6 +18,27 @@
         <u>Numéro de téléphone :</u> {{user.phoneNumber}} <br>
     </p>
     <h4>Session participé :</h4>
-    
+    {% if sessions | length >=1 %}
+        <table class="table table-stripped">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nom de la session</th>
+                    <th>Début </th>
+                    <th>Fin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                    <tr>
+                        <td> {{session.nameSession}} </td>
+                        <td> {{session.beginSession |date("m/d/Y") }} </td>
+                        <td> {{session.finishSession |date("m/d/Y") }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune session prévue</p>
+    {% endif %}
 </div>
 {% endblock %}
