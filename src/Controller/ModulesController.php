@@ -17,7 +17,8 @@ final class ModulesController extends AbstractController
     #[Route('/courses', name: 'app_courses')]
     public function index(CourseRepository $courseRepository): Response
     {
-        $courses = $courseRepository->findAll();
+        // je récupère les modules dans l'ordre croissant de leur nom
+        $courses = $courseRepository->findAll([], ['nameCategory' => 'ASC']);
         return $this->render('course/index.html.twig', [
             'courses' => $courses
         ]);
@@ -27,9 +28,11 @@ final class ModulesController extends AbstractController
     #[Route('/course/{idCategory}/new', name:'new_course')]
     public function new(int $idCategory =null, Course $course =null, Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository) : Response
     {
+        // si la catégorie n'est pas donné en praramètre alors je crée une nouvelle catégorie
         if( !$course){
             $course = new Course();
         }
+        // si la catégorie n'est pas donné en praramètre alors je récupère l'id de la catégorie 
         if (!$idCategory){
             $idCategory = $course->getCategory()->getId();
         }
@@ -59,11 +62,12 @@ final class ModulesController extends AbstractController
     #[Route('/course/{id}/delete', name:'delete_course')]
     public function delete(Course $course, EntityManagerInterface $entityManager): Response
     {
+        // je récupère l'id de la category depuis les modules
         $categoryId = $course->getCategory()->getId();
+        // je supprime le module et met à jour la base de données
         $entityManager->remove($course);
         $entityManager->flush();
-        // dd($course);
-        // return $this->render('course/index.html.twig');
+        
         return $this->redirectToRoute('detail_category', array('id' => $categoryId));
     }
 }

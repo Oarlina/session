@@ -23,6 +23,7 @@ final class SessionsController extends AbstractController
     #[Route('/sessions', name: 'app_sessions')]
     public function index( SessionRepository $sessionRepository): Response
     {
+        // je récupère les sessions et les trie dans l'ordre croissant par le début de la session puis par la fin de la session
         $sessions = $sessionRepository->findBy([], ['beginSession' =>"ASC",'finishSession' =>"ASC"]);
         return $this->render('session/index.html.twig', [
             'sessions' => $sessions,
@@ -34,17 +35,20 @@ final class SessionsController extends AbstractController
     #[Route('/sessions/{id}/edit', name:'edit_session')]
     public function new (Session $session=null, Request $request, EntityManagerInterface $entityManager) : Response
     {
+        // si la session n'est pas donné en praramètre alors je crée une nouvelle session
         if (!$session){
             $session = new Session();
         }
-
+        // on crée un formulaire 
         $form = $this->createForm(SessionType::class, $session);
+        // on dit que l'on veut traiter le formulaire 
         $form->handleRequest($request);
-        // dd($form);
+        // si le formulaire est envoyé et valide
         if ($form->isSubmitted() && $form->isValid())
         {
+            // on récupère les données
             $session = $form->getData();
-
+            // puis on fait un 'prepare' puis 'query' afin de mettre a jour la base de données
             $entityManager->persist($session);
             $entityManager->flush();
 
@@ -56,6 +60,7 @@ final class SessionsController extends AbstractController
     #[Route('/session/{id}/delete', name:'delete_session')]
     public function delete(Session $session, EntitymanagerInterface $entityManager) :Response
     {
+        // je supprime la session et met aa jour la base de données
         $entityManager->remove($session);
         $entityManager->flush();
 
@@ -65,10 +70,11 @@ final class SessionsController extends AbstractController
     #[Route('/session/{idSession}/removeIntern/{idIntern}', name:'remove_intern')]
     public function remove_intern ($idSession, $idIntern,  SessionRepository $sessionRepository, InternRepository $internRepository, EntityManagerInterface $entityManager) :Response
     {
-        $session = $sessionRepository->findBy(['id'=> $idSession]);
-        $intern = $internRepository->findBy(['id'=>$idIntern])[0];
-        $session = $session[0];
-        // dd($session);
+        // je recupere la session ou je veux retirer le stagiaire
+        $session = $sessionRepository->findOneBy(['id'=> $idSession]);
+        // je recupere l'intern que je veux supprimer dans la session
+        $intern = $internRepository->findOneBy(['id'=>$idIntern]);
+        // je supprime l'intern de la session et met a jour la base de donnée
         $intern = $session->removeIntern($intern);
         $entityManager->persist($intern);
         $entityManager->flush();
@@ -84,7 +90,7 @@ final class SessionsController extends AbstractController
         // je donne les varleurs a session
         $session->getId($session->getId());
         $session->addIntern($intern);
-        // et je faais l'ajout dans la bdd
+        // et je fais l'ajout dans la bdd
         $entityManager->persist($session);
         $entityManager->flush();
         
@@ -94,22 +100,22 @@ final class SessionsController extends AbstractController
     #[Route('/session/{idSession}/newProgram/{idCourse}', name:"new_program")]
     public function new_program ($idSession, $idCourse, SessionRepository $sessionRepository, Request $request, CourseRepository $courseRepository, ProgramRepository $programRepository, EntityManagerInterface $entityManager) : Response 
     {
+        // je recupere la session et le module
         $session = $sessionRepository->findOneBy(['id'=> $idSession]);
         $course = $courseRepository->findOneBy(['id' => $idCourse]);
-
+        // je cree un nouveau programme 
         $program = new Program();
         // je verifie que le bouton à été cliqué
         if (isset($_POST['submit']))
         {
-            $nbDay = $request->request->get('nbDay'); // je récupère la valeur du nombre de jour donnée
+            $nbDay = $request->request->get('nbDay'); // je récupère la valeur du nombre de jour donnée 
             // je met mes informations dans program
             $program->setSession($session);
             $program->setCourse($course);
             $program->setNbDay($nbDay);
-            // je l'ajoute dans la base de données
+            // je l'ajoute dans la base de données 
             $entityManager->persist($program);
             $entityManager->flush();
-            // je retourne sur la page détaail de la session
         }
         return $this->redirectToRoute('detail_session', ['id' => $session->getId()]);
     }
@@ -117,13 +123,12 @@ final class SessionsController extends AbstractController
     #[Route('/session/{idSession}/delete/{idCourse}', name:'delete_courseS')]
     public function delete_courseS ($idSession, $idCourse, CourseRepository $courseRepository,  ProgramRepository $programRepository, SessionRepository $sessionRepository, EntityManagerInterface $entityManager) : Response 
     {
-        // $program = $programRepository->findBy(['id' => $idProgram]);
-        $session = $sessionRepository->findBy(['id'=>$idSession])[0]; 
-        $course = $courseRepository->findBy(['id'=>$idCourse])[0];
-        $program = $programRepository->findBy(['session'=>$session->getId(), 'course' => $course->getId()])[0];
-        // dd($program);
+        // je récupère une session, un module et un program selon la session et le module
+        $session = $sessionRepository->finOnedBy(['id'=>$idSession]); 
+        $course = $courseRepository->findOneBy(['id'=>$idCourse]);
+        $program = $programRepository->findOneBy(['session'=>$session->getId(), 'course' => $course->getId()]);
+        // je supprime le programme et met a jour dans la base de données
         $program = $session->removeProgram($program);
-
         $entityManager->persist($program);
         $entityManager->flush();
 
@@ -133,10 +138,10 @@ final class SessionsController extends AbstractController
     #[Route('/session/{id}', name:'detail_session')]
     public function detail (Session $session = null, SessionRepository $sessionRepository, InternRepository $internRepository) :Response
     {
+        // je récupère les stagiaires/ modules qui ne sont pas inscrits et tous les stagiaires pour donner le nombre de staagiaire
         $nonInscrits = $sessionRepository->findNonInscrits( $session->getId() );
         $interns = $internRepository->findAll();
         $courseNotIn = $sessionRepository->NonCourse($session->getId());
-        // dd($courseNotIn);
 
         return $this->render('session/detail.html.twig', [
             'session' => $session,
